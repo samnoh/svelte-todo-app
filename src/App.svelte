@@ -1,47 +1,44 @@
 <script>
-  export let name;
-  console.log($$props);
-  let count = 0;
-  $: doubled = count * 2;
 
-  $: if (count >= 10) {
-    alert(`count is dangerously high!`);
-    count = 9;
-  }
-
-  const handleClick = () => {
-    count += 1;
-  };
 </script>
 
 <style>
-  main {
-    text-align: center;
-    padding: 1em;
-    max-width: 240px;
-    margin: 0 auto;
+  .top {
+    height: 58px;
   }
 
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
+  .top input {
+    outline: none;
+    height: 100%;
+    width: 100%;
+    font-size: 28px;
+    padding: 0 6px;
   }
 
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
-    }
+  .todo-container {
+    display: flex;
+    min-height: 600px;
+    height: 100vh;
+  }
+  .left,
+  .right {
+    flex-grow: 1;
+    padding: 24px;
+  }
+
+  .divider {
+    width: 1px;
+    background: blue;
   }
 </style>
 
 <main>
-  <h1>Hello {name}</h1>
-  <p>
-    Visit the
-    <a href="https://svelte.dev/tutorial">Svelte tutorial</a>
-    to learn how to build Svelte apps!
-  </p>
-  <button on:click={handleClick}>{count} {doubled}</button>
+  <div class="top">
+    <input type="text" />
+  </div>
+  <div class="todo-container">
+    <div class="left">left</div>
+    <div class="divider" />
+    <div class="right">right</div>
+  </div>
 </main>
