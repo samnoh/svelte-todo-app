@@ -2,7 +2,7 @@
   import { selectedNav } from "../stores.js";
 
   let navigators = [
-    { title: "To - Do", icon: "far fa-calendar-check", active: true },
+    { title: "Todo", icon: "far fa-calendar-check", active: true },
     { title: "Done", icon: "fas fa-history", active: false }
   ];
 
@@ -21,7 +21,7 @@
   aside {
     position: relative;
     min-width: 220px;
-    background: #353397;
+    background: #333639;
     padding: 150px 25px;
   }
 
@@ -32,7 +32,7 @@
     color: #fff;
     margin: 0 auto;
     padding-bottom: 14px;
-    border-bottom: 1px solid #5351b8;
+    border-bottom: 1px solid #4d5257;
   }
 
   .title i {
@@ -50,7 +50,7 @@
 
   .btn {
     cursor: pointer;
-    color: #5351b8;
+    color: #4d5257;
     font-size: 20px;
     font-weight: bold;
   }

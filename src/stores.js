@@ -1,25 +1,29 @@
 import { writable } from 'svelte/store';
 
-let uuid = 1;
-
 function createTodos() {
-    const { subscribe, set, update } = writable([
-        {
-            title: 'Buy milk',
-            id: 0,
-            done: false
-        }
-    ]);
+    let localTodos = JSON.parse(localStorage.getItem('todos'));
+    let uuid = JSON.parse(localStorage.getItem('uuid')) + 1;
+
+    if (!localTodos) {
+        localStorage.setItem('todos', '[]');
+        localStorage.setItem('uuid', 0);
+        uuid = 0;
+        localTodos = [];
+    }
+
+    const { subscribe, set, update } = writable(localTodos);
 
     return {
         subscribe,
-        add: input =>
+        add: input => {
             update(todos => {
                 const title = input.value;
                 if (!title) return todos;
                 input.value = '';
-                return [...todos, { title, id: uuid++, done: false }];
-            }),
+                localStorage.setItem('uuid', uuid++);
+                return [...todos, { title, id: uuid, done: false }];
+            });
+        },
         remove: id => update(todos => todos.filter(t => t.id !== id)),
         done: (todo, done) =>
             update(todos => {
@@ -31,6 +35,6 @@ function createTodos() {
     };
 }
 
-export const selectedNav = writable({ title: 'To - Do', index: 0 });
+export const selectedNav = writable({ title: 'Todo', index: 0 });
 
 export const todos = createTodos();

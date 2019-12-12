@@ -1,19 +1,26 @@
 <script>
   import { fade } from "svelte/transition";
+  import { onDestroy } from "svelte";
   import { todos, selectedNav } from "../stores.js";
   import Todo from "./Todo.svelte";
+
+  const unsubscribe = todos.subscribe(todos => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  });
+
+  onDestroy(unsubscribe);
 </script>
 
 <style>
   .todo-container {
     padding: 30px 40px;
     flex-grow: 1;
-    background: #fff;
-    border-bottom-left-radius: 8%;
+    background: #f0f1f7;
+    border-bottom-left-radius: 45px;
   }
 
   .todo-container input {
-    background: #ebeffd;
+    background: #e4e6f5;
     padding: 18px;
     margin-bottom: 42px;
     border-radius: 16px;
@@ -21,16 +28,16 @@
     width: 100%;
     font-size: 28px;
     outline: none;
-    caret-color: #5351b8;
-    color: #5351b8;
+    caret-color: #333;
+    color: #333;
   }
 
   .todo-container input::placeholder {
-    color: #aeabe3;
+    color: #cccdd9;
   }
 
   h2 {
-    color: #5351b8;
+    color: #333;
     font-size: 40px;
     font-weight: bold;
     user-select: none;
@@ -44,10 +51,10 @@
   {#if $selectedNav.index === 0}
     <input
       in:fade
-      placeholder="Add to - do"
+      placeholder="Add todo"
       on:keydown={e => e.which === 13 && todos.add(e.target)} />
     <div in:fade>
-      {#each $todos.filter(t => !t.done) as todo (todo.id)}
+      {#each $todos.filter(t => !t.done) as todo (todo)}
         <Todo
           {todo}
           remove={() => todos.remove(todo.id)}
@@ -56,7 +63,7 @@
     </div>
   {:else}
     <div in:fade>
-      {#each $todos.filter(t => t.done) as todo (todo.id)}
+      {#each $todos.filter(t => t.done) as todo (todo)}
         <Todo
           {todo}
           remove={() => todos.remove(todo.id)}
