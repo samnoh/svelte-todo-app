@@ -1,5 +1,5 @@
 <script>
-  let navigators = [
+  export let navigators = [
     { title: "To - Do", icon: "far fa-calendar-check", active: true },
     { title: "Done", icon: "fas fa-history", active: false }
   ];
