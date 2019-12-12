@@ -1,8 +1,14 @@
 <script>
-  const navigators = [
+  let navigators = [
     { title: "To - Do", icon: "far fa-calendar-check", active: true },
     { title: "Done", icon: "fas fa-history", active: false }
   ];
+
+  function activeNavigator(title) {
+    navigators = navigators.map(n =>
+      n.title === title ? { ...n, active: true } : { ...n, active: false }
+    );
+  }
 </script>
 
 <style>
@@ -42,11 +48,9 @@
     font-weight: bold;
   }
 
-  .btn:hover {
-    color: #e2e3e5;
-  }
-
+  .btn:hover,
   .btn:hover i {
+    transition: color 0.3s ease-in-out;
     color: #e2e3e5;
   }
 
@@ -68,14 +72,16 @@
 
 <aside>
   <div class="title">
-    <i class="fas fa-layer-group" />
-    <a href="/">Sveltodos</a>
+    <a href="/">
+      <i class="fas fa-layer-group" />
+      Sveltodos
+    </a>
   </div>
   <div class="top">
-    {#each navigators as nav (nav.active)}
-      <div class="btn">
-        <i class={nav.icon} />
-        {nav.title}
+    {#each navigators as { title, icon, active } (active)}
+      <div class="btn" class:active on:click={() => activeNavigator(title)}>
+        <i class={icon} />
+        {title}
       </div>
     {/each}
   </div>
