@@ -13,8 +13,7 @@
       return {
         duration: 600,
         easing: quintOut,
-        css: t => `transform: ${transform} scale(${t});
-      			   opacity: ${t};`
+        css: t => `transform: ${transform} scale(${t}); opacity: ${t};`
       };
     }
   });
@@ -73,35 +72,55 @@
   label:hover button {
     opacity: 1;
   }
+
+  .todo-container {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1em;
+    margin: 0 auto;
+    width: 700px;
+  }
+
+  .todo-container > input {
+    font-size: 1.4em;
+    grid-column: 1/3;
+  }
 </style>
 
-<div>
-  <h2>Todo</h2>
-  {#each $todos.filter(t => !t.done) as todo (todo.id)}
-    <label
-      in:receive={{ key: todo.id }}
-      out:send={{ key: todo.id }}
-      animate:flip={{ duration: 200 }}>
-      <input type="checkbox" on:change={() => todos.done(todo, true)} />
-      {todo.title}
-      <button on:click={() => todos.remove(todo.id)}>remove</button>
-    </label>
-  {/each}
-</div>
-<div>
-  <h2>Done</h2>
-  {#each $todos.filter(t => t.done) as todo (todo.id)}
-    <label
-      class="done"
-      in:receive={{ key: todo.id }}
-      out:send={{ key: todo.id }}
-      animate:flip={{ duration: 200 }}>
-      <input
-        type="checkbox"
-        on:change={() => todos.done(todo, false)}
-        checked />
-      {todo.title}
-      <button on:click={() => todos.remove(todo.id)}>remove</button>
-    </label>
-  {/each}
+<div class="todo-container">
+  <input
+    type="text"
+    placeholder="Your todos..."
+    on:keydown={e => e.which === 13 && todos.add(e.target)} />
+  <div>
+    <h2>Todo</h2>
+    {#each $todos.filter(t => !t.done) as todo (todo.id)}
+      <label
+        in:receive={{ key: todo.id }}
+        out:send={{ key: todo.id }}
+        animate:flip={{ duration: 200 }}>
+        <input type="checkbox" on:change={() => todos.done(todo, true)} />
+        {todo.title}
+        <button on:click={() => todos.remove(todo.id)}>remove</button>
+      </label>
+    {/each}
+  </div>
+  <div>
+    <h2>Done</h2>
+    {#each $todos.filter(t => t.done) as todo (todo.id)}
+      <label
+        class="done"
+        in:receive={{ key: todo.id }}
+        out:send={{ key: todo.id }}
+        animate:flip={{ duration: 200 }}>
+        <input
+          type="checkbox"
+          on:change={() => todos.done(todo, false)}
+          checked />
+        {todo.title}
+        <button on:click={() => todos.remove(todo.id)}>remove</button>
+      </label>
+    {/each}
+  </div>
 </div>
