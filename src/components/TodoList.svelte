@@ -4,11 +4,22 @@
   import { todos, selectedNav } from "../stores.js";
   import Todo from "./Todo.svelte";
 
-  const unsubscribe = todos.subscribe(todos => {
+  let _todos;
+  let _done;
+  let isTodoPage;
+
+  const todoUnsubscribe = todos.subscribe(todos => {
     localStorage.setItem("todos", JSON.stringify(todos));
+    _todos = $todos.filter(t => !t.done);
+    _done = $todos.filter(t => t.done);
   });
 
-  onDestroy(unsubscribe);
+  const selectedNavUnsubscribe = selectedNav.subscribe(({ index }) => {
+    isTodoPage = $selectedNav.index === 0;
+  });
+
+  onDestroy(todoUnsubscribe);
+  onDestroy(selectedNavUnsubscribe);
 </script>
 
 <style>
@@ -19,10 +30,13 @@
     border-bottom-left-radius: 45px;
   }
 
-  .todo-container input {
+  .top {
+    margin-bottom: 42px;
+  }
+
+  .top input {
     background: #e4e6f5;
     padding: 18px;
-    margin-bottom: 42px;
     border-radius: 16px;
     border: none;
     width: 100%;
@@ -30,9 +44,11 @@
     outline: none;
     caret-color: #333;
     color: #333;
+    border: 1px solid #dfdfe6;
+    margin-top: 20px;
   }
 
-  .todo-container input::placeholder {
+  .top input::placeholder {
     color: #cccdd9;
   }
 
@@ -41,34 +57,42 @@
     font-size: 40px;
     font-weight: bold;
     user-select: none;
-    margin-bottom: 20px;
     text-indent: 10px;
+    display: inline-block;
+  }
+
+  h2 span {
+    font-size: 18px;
+    color: #cfd1d4;
+    vertical-align: middle;
   }
 </style>
 
+<svelte:head>
+  <title>
+    {$selectedNav.title} ({isTodoPage ? _todos.length : _done.length}) |
+    Sveltodos
+  </title>
+</svelte:head>
 <div class="todo-container">
-  <h2>{$selectedNav.title}</h2>
-  {#if $selectedNav.index === 0}
-    <input
-      in:fade
-      placeholder="Add todo"
-      on:keydown={e => e.which === 13 && todos.add(e.target)} />
-    <div in:fade>
-      {#each $todos.filter(t => !t.done) as todo (todo)}
-        <Todo
-          {todo}
-          remove={() => todos.remove(todo.id)}
-          done={() => todos.done(todo, true)} />
-      {/each}
-    </div>
-  {:else}
-    <div in:fade>
-      {#each $todos.filter(t => t.done) as todo (todo)}
-        <Todo
-          {todo}
-          remove={() => todos.remove(todo.id)}
-          done={() => todos.done(todo, false)} />
-      {/each}
-    </div>
-  {/if}
+  <div class="top">
+    <h2 in:fade|intro>
+      {$selectedNav.title}
+      <span>({isTodoPage ? _todos.length : _done.length})</span>
+    </h2>
+    {#if isTodoPage}
+      <input
+        in:fade|intro
+        placeholder="Add todo"
+        on:keydown={e => e.which === 13 && todos.add(e.target)} />
+    {/if}
+  </div>
+  <div>
+    {#each isTodoPage ? _todos.filter(t => !t.done) : _done.filter(t => t.done) as todo (todo)}
+      <Todo
+        {todo}
+        remove={() => todos.remove(todo.id)}
+        done={() => todos.done(todo, isTodoPage)} />
+    {/each}
+  </div>
 </div>
