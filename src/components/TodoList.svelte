@@ -2,8 +2,6 @@
   import { fade } from "svelte/transition";
   import { todos, selectedNav } from "../stores.js";
   import Todo from "./Todo.svelte";
-
-  import { navigators } from "./LeftPanel.svelte";
 </script>
 
 <style>
@@ -47,8 +45,7 @@
     <input
       in:fade
       placeholder="Add to - do"
-      on:keydown={e => e.which === 13 && todos.add(e.target)}
-      autoFocus />
+      on:keydown={e => e.which === 13 && todos.add(e.target)} />
     <div in:fade>
       {#each $todos.filter(t => !t.done) as todo (todo.id)}
         <Todo
