@@ -1,30 +1,43 @@
 <script>
-  import { todos } from "../stores.js";
-  import { flip } from "svelte/animate";
-  import { crossfade } from "svelte/transition";
-  import { quintOut } from "svelte/easing";
+  import { fade } from "svelte/transition";
+  import { todos, selectedNav } from "../stores.js";
+  import Todo from "./Todo.svelte";
 
-  const [send, receive] = crossfade({
-    duration: d => Math.sqrt(d * 200),
-    fallback(node, params) {
-      const style = getComputedStyle(node);
-      const transform = style.transform === "none" ? "" : style.transform;
-
-      return {
-        duration: 600,
-        easing: quintOut,
-        css: t => `transform: ${transform} scale(${t}); opacity: ${t};`
-      };
-    }
-  });
+  import { navigators } from "./LeftPanel.svelte";
 </script>
 
 <style>
+  .todo-container {
+    padding: 30px 40px;
+    flex-grow: 1;
+    background: #fff;
+    border-bottom-left-radius: 8%;
+  }
+
+  .todo-container input {
+    background: #ebeffd;
+    padding: 18px;
+    margin-bottom: 42px;
+    border-radius: 16px;
+    border: none;
+    width: 100%;
+    font-size: 28px;
+    outline: none;
+    caret-color: #5351b8;
+    color: #5351b8;
+  }
+
+  .todo-container input::placeholder {
+    color: #aeabe3;
+  }
+
   h2 {
-    font-size: 2em;
-    font-weight: 200;
+    color: #5351b8;
+    font-size: 40px;
+    font-weight: bold;
     user-select: none;
-    margin: 0 0 0.5em 0;
+    margin-bottom: 20px;
+    text-indent: 10px;
   }
 
   label {
@@ -72,55 +85,32 @@
   label:hover button {
     opacity: 1;
   }
-
-  .todo-container {
-    flex-grow: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 1em;
-    margin: 0 auto;
-    width: 700px;
-  }
-
-  .todo-container > input {
-    font-size: 1.4em;
-    grid-column: 1/3;
-  }
 </style>
 
 <div class="todo-container">
-  <input
-    type="text"
-    placeholder="Your todos..."
-    on:keydown={e => e.which === 13 && todos.add(e.target)} />
-  <div>
-    <h2>Todo</h2>
-    {#each $todos.filter(t => !t.done) as todo (todo.id)}
-      <label
-        in:receive={{ key: todo.id }}
-        out:send={{ key: todo.id }}
-        animate:flip={{ duration: 200 }}>
-        <input type="checkbox" on:change={() => todos.done(todo, true)} />
-        {todo.title}
-        <button on:click={() => todos.remove(todo.id)}>remove</button>
-      </label>
-    {/each}
-  </div>
-  <div>
-    <h2>Done</h2>
-    {#each $todos.filter(t => t.done) as todo (todo.id)}
-      <label
-        class="done"
-        in:receive={{ key: todo.id }}
-        out:send={{ key: todo.id }}
-        animate:flip={{ duration: 200 }}>
-        <input
-          type="checkbox"
-          on:change={() => todos.done(todo, false)}
-          checked />
-        {todo.title}
-        <button on:click={() => todos.remove(todo.id)}>remove</button>
-      </label>
-    {/each}
-  </div>
+  <h2>{$selectedNav.title}</h2>
+  {#if $selectedNav.index === 0}
+    <input
+      in:fade
+      placeholder="Add to - do"
+      on:keydown={e => e.which === 13 && todos.add(e.target)}
+      autoFocus />
+    <div in:fade>
+      {#each $todos.filter(t => !t.done) as todo (todo.id)}
+        <Todo
+          {todo}
+          remove={() => todos.remove(todo.id)}
+          done={() => todos.done(todo, true)} />
+      {/each}
+    </div>
+  {:else}
+    <div>
+      {#each $todos.filter(t => t.done) as todo (todo.id)}
+        <Todo
+          {todo}
+          remove={() => todos.remove(todo.id)}
+          done={() => todos.done(todo, false)} />
+      {/each}
+    </div>
+  {/if}
 </div>

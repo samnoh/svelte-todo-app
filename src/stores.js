@@ -31,4 +31,6 @@ function createTodos() {
     };
 }
 
+export const selectedNav = writable({ title: 'To - Do', index: 0 });
+
 export const todos = createTodos();

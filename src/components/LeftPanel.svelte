@@ -1,13 +1,19 @@
 <script>
-  export let navigators = [
+  import { selectedNav } from "../stores.js";
+
+  let navigators = [
     { title: "To - Do", icon: "far fa-calendar-check", active: true },
     { title: "Done", icon: "fas fa-history", active: false }
   ];
 
   function activeNavigator(title) {
-    navigators = navigators.map(n =>
-      n.title === title ? { ...n, active: true } : { ...n, active: false }
-    );
+    navigators = navigators.map((n, i) => {
+      if (n.title === title) {
+        selectedNav.set({ ...n, index: i });
+        return { ...n, active: true };
+      }
+      return { ...n, active: false };
+    });
   }
 </script>
 
@@ -31,6 +37,7 @@
 
   .title i {
     color: #fff;
+    margin-right: 4px;
   }
 
   .top .btn {
@@ -56,7 +63,7 @@
 
   .btn i {
     width: 20px;
-    margin-right: 20px;
+    margin-right: 14px;
   }
 
   .btn.active,
@@ -67,6 +74,7 @@
   .bottom {
     position: absolute;
     bottom: 25px;
+    margin: 0 auto;
   }
 </style>
 
