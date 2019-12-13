@@ -24,9 +24,9 @@
 
 <style>
   .container {
+    height: 100vh;
     padding: 30px 40px;
     width: calc(100% - 220px);
-    height: 97.5vh;
     background: #f0f1f7;
     border-bottom-left-radius: 45px;
     overflow-y: scroll;
