@@ -85,7 +85,10 @@
     color: lightgray;
   }
 
-  label:not(.isTodoPage).removed,
+  label:not(.isTodoPage).removed {
+    color: #eee;
+  }
+
   label:not(.isTodoPage).finished {
     color: #333;
   }

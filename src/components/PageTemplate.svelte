@@ -1,3 +1,7 @@
+<script>
+  import LeftPanel from "./LeftPanel.svelte";
+</script>
+
 <style>
   main {
     display: flex;
@@ -6,5 +10,6 @@
 </style>
 
 <main>
+  <LeftPanel />
   <slot />
 </main>
