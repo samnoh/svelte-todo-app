@@ -11,7 +11,7 @@ function createTodos() {
         localTodos = [];
     }
 
-    const { subscribe, set, update } = writable(localTodos);
+    const { subscribe, update } = writable(localTodos);
 
     return {
         subscribe,
@@ -31,10 +31,31 @@ function createTodos() {
                 todos = todos.filter(t => t !== todo);
                 return todos.concat(todo);
             }),
-        reset: () => set([])
+        reset: () => {
+            if (confirm('Are you sure to empty?')) update(todos => todos.filter(t => !t.done));
+        }
     };
 }
 
-export const selectedNav = writable({ title: 'Todo', index: 0 });
-
 export const todos = createTodos();
+
+function createNav() {
+    let selectedNav = JSON.parse(localStorage.getItem('selectedNav'));
+
+    if (!selectedNav) {
+        const initialValue = { title: 'Todo', index: 0 };
+        localStorage.setItem('selectedNav', JSON.stringify(initialValue));
+        selectedNav = initialValue;
+    }
+
+    const { subscribe, update } = writable(selectedNav);
+
+    return {
+        subscribe,
+        navigate: nav => {
+            update(() => nav);
+        }
+    };
+}
+
+export const selectedNav = createNav();

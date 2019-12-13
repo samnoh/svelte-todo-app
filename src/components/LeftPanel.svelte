@@ -1,20 +1,27 @@
 <script>
+  import { onDestroy } from "svelte";
   import { selectedNav } from "../stores.js";
 
   let navigators = [
-    { title: "Todo", icon: "far fa-calendar-check", active: true },
-    { title: "Done", icon: "fas fa-history", active: false }
+    { title: "Todo", icon: "far fa-calendar-check", index: 0 },
+    { title: "Done", icon: "fas fa-history", index: 1 }
   ];
 
   function activeNavigator(title) {
-    navigators = navigators.map((n, i) => {
-      if (n.title === title) {
-        selectedNav.set({ ...n, index: i });
-        return { ...n, active: true };
+    navigators = navigators.map(nav => {
+      if (nav.title === title) {
+        selectedNav.navigate({ ...nav });
+        return nav;
       }
-      return { ...n, active: false };
+      return nav;
     });
   }
+
+  const selectedNavUnsubscribe = selectedNav.subscribe(nav => {
+    localStorage.setItem("selectedNav", JSON.stringify(nav));
+  });
+
+  onDestroy(selectedNavUnsubscribe);
 </script>
 
 <style>
@@ -86,8 +93,11 @@
     </a>
   </div>
   <div class="top">
-    {#each navigators as { title, icon, active } (active)}
-      <div class="btn" class:active on:click={() => activeNavigator(title)}>
+    {#each navigators as { title, icon, index } (index)}
+      <div
+        class="btn"
+        class:active={index === $selectedNav.index}
+        on:click={() => activeNavigator(title)}>
         <i class={icon} />
         {title}
       </div>

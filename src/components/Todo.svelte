@@ -1,15 +1,29 @@
 <script>
   import { fade } from "svelte/transition";
+  export let isTodoPage;
   export let todo;
   export let done;
   export let remove;
+
+  let removed = false;
+  let finished = false;
+
+  $: _remove = () => {
+    removed = true;
+    setTimeout(remove, 400);
+  };
+
+  $: _done = () => {
+    finished = true;
+    setTimeout(done, 400);
+  };
 </script>
 
 <style>
   label {
     cursor: pointer;
     font-size: 24px;
-    padding: 20px;
+    padding: 20px 28px;
     border-radius: 12px;
     position: relative;
     display: block;
@@ -19,6 +33,10 @@
     border: 1px solid #e8e9ed;
     margin-bottom: 30px;
     box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.12);
+    transition: color 0.3s ease-in-out;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   input[type="checkbox"] {
@@ -30,7 +48,7 @@
     outline: none;
     position: absolute;
     top: 18px;
-    right: 10px;
+    right: 12px;
     width: 30px;
     height: 30px;
     background: no-repeat 50% 50%
@@ -38,7 +56,7 @@
     background-size: 30px 30px;
     border: none;
     opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
     text-indent: -9999px;
   }
 
@@ -49,11 +67,42 @@
   label:hover button:hover {
     opacity: 0.7;
   }
+
+  label.isTodoPage.removed,
+  label.isTodoPage.finished {
+    color: gray;
+  }
+
+  label.isTodoPage.removed {
+    animation: fadeOut 0.4s ease-in-out;
+  }
+
+  label.isTodoPage.finished {
+    text-decoration: line-through;
+  }
+
+  label:not(.isTodoPage) {
+    color: lightgray;
+  }
+
+  label:not(.isTodoPage).removed,
+  label:not(.isTodoPage).finished {
+    color: #333;
+  }
+
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
 </style>
 
 <svelte:options immutable={true} />
-<label in:fade|intro>
-  <input type="checkbox" on:change={done} />
+<label in:fade|intro class:removed class:finished class:isTodoPage>
+  <input type="checkbox" on:change={_done} />
   {todo.title}
-  <button on:click={remove}>remove</button>
+  <button on:click={_remove}>remove</button>
 </label>
