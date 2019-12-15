@@ -63,12 +63,14 @@
     text-indent: -9999px;
   }
 
-  label:hover button {
-    opacity: 1;
-  }
+  @media (hover: hover) {
+    label:hover button {
+      opacity: 1;
+    }
 
-  label:hover button:hover {
-    opacity: 0.4;
+    label:hover button:hover {
+      opacity: 0.4;
+    }
   }
 
   label.isTodoPage.removed,

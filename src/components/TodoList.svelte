@@ -31,7 +31,8 @@
     overflow: hidden;
   }
 
-  .container > div {
+  .body,
+  .top > div {
     max-width: 1200px;
     margin: 0 auto;
   }
@@ -39,7 +40,6 @@
   .top {
     position: relative;
     z-index: 1;
-    padding: 28px 48px;
     background: #f0f1f7;
     box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.15);
   }
@@ -61,6 +61,10 @@
 
   .top input::placeholder {
     color: #cccdd9;
+  }
+
+  .top > div {
+    padding: 28px 48px;
   }
 
   h2 {
@@ -121,12 +125,12 @@
       border-bottom-left-radius: 0px;
     }
 
-    .top {
+    .top > div {
       padding: 18px 12px;
     }
 
     .top input {
-      margin-top: 18px;
+      margin-top: 28px;
       font-size: 22px;
       padding: 14px;
     }
@@ -141,8 +145,8 @@
     }
 
     h2 {
-      font-size: 30px;
-      text-indent: 50px;
+      font-size: 28px;
+      text-indent: 52px;
     }
 
     .reset-button {
@@ -163,8 +167,8 @@
   </title>
 </svelte:head>
 <div class="container">
-  <div>
-    <div class="top">
+  <div class="top">
+    <div>
       <h2 in:fade|intro>
         {$selectedNav.title}
         <span>({isTodoPage ? _todos.length : _done.length})</span>
@@ -183,6 +187,8 @@
         </button>
       {/if}
     </div>
+  </div>
+  <div class="body">
     <div class="todo-container" class:done={!isTodoPage}>
       {#if isTodoPage ? !_todos.length : !_done.length}
         <div class="no-item">No Item</div>
