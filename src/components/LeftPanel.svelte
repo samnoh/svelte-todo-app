@@ -52,7 +52,7 @@
   }
 
   .title {
-    font-size: 30px;
+    font-size: 28px;
     color: #fff;
     padding-bottom: 18px;
     border-bottom: 1px solid #4d5257;
@@ -122,7 +122,7 @@
     display: none;
     z-index: 99;
     position: absolute;
-    top: 14px;
+    top: 18px;
     left: 20px;
     animation: fadeIn 0.4s ease-in-out forwards;
   }
@@ -153,7 +153,8 @@
     }
 
     .btn {
-      font-size: 24px;
+      display: block;
+      font-size: 26px;
       margin-bottom: 24px;
     }
 
@@ -161,7 +162,6 @@
     .bottom {
       margin-bottom: 24px;
       align-self: flex-start;
-      flex-grow: 0;
     }
 
     .bars {

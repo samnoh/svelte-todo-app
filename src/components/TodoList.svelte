@@ -127,6 +127,7 @@
     .top input {
       margin-top: 18px;
       font-size: 22px;
+      padding: 14px;
     }
 
     .todo-container {
