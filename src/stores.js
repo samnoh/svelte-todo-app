@@ -40,7 +40,7 @@ function createNav() {
     let selectedNav = JSON.parse(localStorage.getItem('selectedNav'));
 
     if (!selectedNav) {
-        const initialValue = { title: 'Todo', index: 0 };
+        const initialValue = { title: 'To-do', index: 0 };
         localStorage.setItem('selectedNav', JSON.stringify(initialValue));
         selectedNav = initialValue;
     }

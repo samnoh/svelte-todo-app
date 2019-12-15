@@ -25,14 +25,20 @@
 <style>
   .container {
     height: 100vh;
-    padding: 30px 40px;
+    padding-top: 28px;
     width: calc(100% - 220px);
     background: #f0f1f7;
     border-bottom-left-radius: 45px;
-    overflow-y: scroll;
+    overflow: hidden;
   }
+
   .top {
-    margin-bottom: 42px;
+    position: relative;
+    z-index: 999;
+    padding: 0 48px;
+    padding-bottom: 28px;
+    background: #f0f1f7;
+    box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.15);
   }
 
   .top input {
@@ -84,6 +90,27 @@
   .reset-button:hover {
     opacity: 0.7;
   }
+
+  .todo-container {
+    padding: 30px 48px;
+    overflow-y: scroll;
+    height: calc(100vh - 187px);
+  }
+
+  .todo-container.done {
+    height: calc(100vh - 96px);
+  }
+
+  .no-item {
+    font-size: 28px;
+    font-weight: bold;
+    color: #cccdd9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 95%;
+    user-select: none;
+  }
 </style>
 
 <svelte:head>
@@ -101,7 +128,7 @@
     {#if isTodoPage}
       <input
         in:fade|intro
-        placeholder="Add todo"
+        placeholder="Add to-do"
         on:keydown={e => e.which === 13 && todos.add(e.target)} />
     {:else}
       <button
@@ -112,13 +139,17 @@
       </button>
     {/if}
   </div>
-  <div class="todo-container">
-    {#each isTodoPage ? _todos.filter(t => !t.done) : _done.filter(t => t.done) as todo (todo)}
-      <Todo
-        {todo}
-        remove={() => todos.remove(todo.id)}
-        done={() => todos.done(todo, isTodoPage)}
-        {isTodoPage} />
-    {/each}
+  <div class="todo-container" class:done={!isTodoPage}>
+    {#if isTodoPage ? !_todos.length : !_done.length}
+      <div class="no-item">No Item</div>
+    {:else}
+      {#each isTodoPage ? _todos.filter(t => !t.done) : _done.filter(t => t.done) as todo (todo)}
+        <Todo
+          {todo}
+          remove={() => todos.remove(todo.id)}
+          done={() => todos.done(todo, isTodoPage)}
+          {isTodoPage} />
+      {/each}
+    {/if}
   </div>
 </div>

@@ -31,12 +31,15 @@
     color: #333;
     background: #fff;
     border: 1px solid #e8e9ed;
-    margin-bottom: 30px;
     box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.12);
     transition: color 0.3s ease-in-out;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  label:not(:last-child) {
+    margin-bottom: 30px;
   }
 
   input[type="checkbox"] {

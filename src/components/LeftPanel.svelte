@@ -3,14 +3,14 @@
   import { selectedNav } from "../stores.js";
 
   let navigators = [
-    { title: "Todo", icon: "far fa-calendar-check", index: 0 },
+    { title: "To-do", icon: "far fa-calendar-check", index: 0 },
     { title: "Done", icon: "fas fa-history", index: 1 }
   ];
 
   function activeNavigator(title) {
     navigators = navigators.map(nav => {
       if (nav.title === title) {
-        selectedNav.navigate({ ...nav });
+        selectedNav.navigate(nav);
         return nav;
       }
       return nav;
