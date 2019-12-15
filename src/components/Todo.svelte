@@ -121,5 +121,5 @@
 <label in:fade|intro class:removed class:finished class:isTodoPage>
   <input type="checkbox" on:change={_done} />
   {todo.title}
-  <button on:click={_remove}>remove</button>
+  <button on:click|stopPropagation={_remove}>remove</button>
 </label>
