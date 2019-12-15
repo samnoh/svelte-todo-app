@@ -68,7 +68,7 @@
   }
 
   label:hover button:hover {
-    opacity: 0.7;
+    opacity: 0.4;
   }
 
   label.isTodoPage.removed,
@@ -102,6 +102,17 @@
     }
     100% {
       opacity: 0;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    label {
+      font-size: 20px;
+    }
+
+    button {
+      opacity: 0.7;
+      top: 14.5px;
     }
   }
 </style>

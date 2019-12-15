@@ -25,18 +25,21 @@
 <style>
   .container {
     height: 100vh;
-    padding-top: 28px;
     width: calc(100% - 220px);
     background: #f0f1f7;
     border-bottom-left-radius: 45px;
     overflow: hidden;
   }
 
+  .container > div {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
   .top {
     position: relative;
-    z-index: 999;
-    padding: 0 48px;
-    padding-bottom: 28px;
+    z-index: 1;
+    padding: 28px 48px;
     background: #f0f1f7;
     box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.15);
   }
@@ -82,8 +85,7 @@
     color: #333;
     border-radius: 8px;
     position: absolute;
-    margin-top: -4px;
-    right: 40px;
+    right: 38px;
     outline: none;
   }
 
@@ -111,6 +113,45 @@
     height: 95%;
     user-select: none;
   }
+
+  @media only screen and (max-width: 768px) {
+    .container {
+      width: 100%;
+      border-bottom-left-radius: 0px;
+    }
+
+    .top {
+      padding: 18px 12px;
+    }
+
+    .top input {
+      margin-top: 18px;
+      font-size: 22px;
+    }
+
+    .todo-container {
+      height: calc(100vh - 152px);
+      padding: 30px 12px;
+    }
+
+    .todo-container.done {
+      height: calc(100vh - 70px);
+    }
+
+    h2 {
+      font-size: 30px;
+      text-indent: 50px;
+    }
+
+    .reset-button {
+      right: 16px;
+      margin-top: -6px;
+    }
+
+    .no-item {
+      font-size: 24px;
+    }
+  }
 </style>
 
 <svelte:head>
@@ -120,36 +161,38 @@
   </title>
 </svelte:head>
 <div class="container">
-  <div class="top">
-    <h2 in:fade|intro>
-      {$selectedNav.title}
-      <span>({isTodoPage ? _todos.length : _done.length})</span>
-    </h2>
-    {#if isTodoPage}
-      <input
-        in:fade|intro
-        placeholder="Add to-do"
-        on:keydown={e => e.which === 13 && todos.add(e.target)} />
-    {:else}
-      <button
-        class="reset-button"
-        on:click={() => todos.reset()}
-        disabled={!_done.length}>
-        <i class="fas fa-trash-restore fa-2x" />
-      </button>
-    {/if}
-  </div>
-  <div class="todo-container" class:done={!isTodoPage}>
-    {#if isTodoPage ? !_todos.length : !_done.length}
-      <div class="no-item">No Item</div>
-    {:else}
-      {#each isTodoPage ? _todos.filter(t => !t.done) : _done.filter(t => t.done) as todo (todo)}
-        <Todo
-          {todo}
-          remove={() => todos.remove(todo.id)}
-          done={() => todos.done(todo, isTodoPage)}
-          {isTodoPage} />
-      {/each}
-    {/if}
+  <div>
+    <div class="top">
+      <h2 in:fade|intro>
+        {$selectedNav.title}
+        <span>({isTodoPage ? _todos.length : _done.length})</span>
+      </h2>
+      {#if isTodoPage}
+        <input
+          in:fade|intro
+          placeholder="Add to-do"
+          on:keydown={e => e.which === 13 && todos.add(e.target)} />
+      {:else}
+        <button
+          class="reset-button"
+          on:click={() => todos.reset()}
+          disabled={!_done.length}>
+          <i class="fas fa-trash-restore fa-2x" />
+        </button>
+      {/if}
+    </div>
+    <div class="todo-container" class:done={!isTodoPage}>
+      {#if isTodoPage ? !_todos.length : !_done.length}
+        <div class="no-item">No Item</div>
+      {:else}
+        {#each isTodoPage ? _todos.filter(t => !t.done) : _done.filter(t => t.done) as todo (todo)}
+          <Todo
+            {todo}
+            remove={() => todos.remove(todo.id)}
+            done={() => todos.done(todo, isTodoPage)}
+            {isTodoPage} />
+        {/each}
+      {/if}
+    </div>
   </div>
 </div>
