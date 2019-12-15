@@ -56,6 +56,7 @@
     color: #333;
     border: 1px solid #dfdfe6;
     margin-top: 20px;
+    box-shadow: none;
   }
 
   .top input::placeholder {
