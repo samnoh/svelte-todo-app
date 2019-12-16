@@ -1,6 +1,6 @@
 <script>
   import { onDestroy } from "svelte";
-  import { selectedNav } from "../stores.js";
+  import { selectedNav, todos } from "../stores.js";
 
   let showNav = false;
 
@@ -26,8 +26,15 @@
 
   onDestroy(selectedNavUnsubscribe);
 
-  function hideNav() {
-    showNav = false;
+  function resetData() {
+    todos.resetAll();
+    hideNav();
+  }
+
+  function hideNav(e) {
+    if (e.target.innerWidth >= 768) {
+      showNav = false;
+    }
   }
 
   window.addEventListener("resize", hideNav);
@@ -63,7 +70,7 @@
     margin-right: 4px;
   }
 
-  .top .btn {
+  .btn {
     margin-bottom: 28px;
   }
 
@@ -155,13 +162,15 @@
     .btn {
       display: block;
       font-size: 26px;
-      margin-bottom: 24px;
     }
 
     .top,
     .bottom {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
       margin-bottom: 24px;
-      align-self: flex-start;
+      align-items: flex-start;
     }
 
     .bars {
@@ -224,6 +233,10 @@
     {/each}
   </div>
   <div class="bottom">
+    <div class="btn" on:click={resetData}>
+      <i class="fas fa-ban" />
+      Reset Data
+    </div>
     <a href="https://github.com/samnoh/svelte-todo-app" target="_blank">
       <div class="btn">
         <i class="fab fa-github" />

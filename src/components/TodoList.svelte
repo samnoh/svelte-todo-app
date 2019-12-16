@@ -1,12 +1,25 @@
 <script>
   import { fade } from "svelte/transition";
-  import { onDestroy } from "svelte";
+  import { onDestroy, tick } from "svelte";
   import { todos, selectedNav } from "../stores.js";
   import Todo from "./Todo.svelte";
 
   let _todos;
   let _done;
   let isTodoPage;
+  let todoContainer;
+
+  function autoScroll() {
+    todoContainer.scrollTo(0, todoContainer.scrollHeight);
+  }
+
+  async function onSubmit(e) {
+    if (e.which === 13) {
+      todos.add(e.target);
+      await tick();
+      autoScroll();
+    }
+  }
 
   const todoUnsubscribe = todos.subscribe(todos => {
     localStorage.setItem("todos", JSON.stringify(todos));
@@ -174,10 +187,7 @@
         <span>({isTodoPage ? _todos.length : _done.length})</span>
       </h2>
       {#if isTodoPage}
-        <input
-          in:fade|intro
-          placeholder="Add to-do"
-          on:keydown={e => e.which === 13 && todos.add(e.target)} />
+        <input in:fade|intro placeholder="Add to-do" on:keydown={onSubmit} />
       {:else}
         <button
           class="reset-button"
@@ -189,7 +199,10 @@
     </div>
   </div>
   <div class="body">
-    <div class="todo-container" class:done={!isTodoPage}>
+    <div
+      class="todo-container"
+      class:done={!isTodoPage}
+      bind:this={todoContainer}>
       {#if isTodoPage ? !_todos.length : !_done.length}
         <div class="no-item">No Item</div>
       {:else}

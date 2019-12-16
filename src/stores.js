@@ -30,6 +30,9 @@ function createTodos() {
             }),
         reset: () => {
             if (confirm('Are you sure to empty?')) update(todos => todos.filter(t => !t.done));
+        },
+        resetAll: () => {
+            if (confirm('Are you sure to empty?')) update(todos => []);
         }
     };
 }
