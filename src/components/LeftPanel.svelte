@@ -17,7 +17,7 @@
       }
       return nav;
     });
-    hideNav();
+    showNav = false;
   }
 
   const selectedNavUnsubscribe = selectedNav.subscribe(nav => {
@@ -28,7 +28,7 @@
 
   function resetData() {
     todos.resetAll();
-    hideNav();
+    showNav = false;
   }
 
   function hideNav(e) {
